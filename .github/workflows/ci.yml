@@ -59,7 +59,7 @@ jobs:
             bucket = "test-bucket-compliant"
 
             tags = {
-              business-unit = "test"
+              business-unit = "HMPPS"
               application   = "test-app"
               owner         = "test@example.com"
               is-production = "false"
@@ -104,13 +104,6 @@ jobs:
         uses: ./
         with:
           terraform_directory: test-terraform/compliant
-          required_tags: |
-            business-unit
-            application
-            owner
-            is-production
-            service-area
-            environment
 
       - name: Test non-compliant resources fail
         id: non-compliant
@@ -118,10 +111,6 @@ jobs:
         continue-on-error: true
         with:
           terraform_directory: test-terraform/non-compliant
-          required_tags: |
-            business-unit
-            application
-            owner
 
       - name: Verify non-compliant check failed
         run: |
@@ -157,7 +146,7 @@ jobs:
             bucket = "test-bucket-whitespace-tags"
 
             tags = {
-              business-unit = "   "
+              business-unit = "HMPPS"
               application   = "test-app"
               owner         = "  "
               is-production = "false"
@@ -212,8 +201,8 @@ jobs:
             bucket = "test-bucket-empty-tags"
 
             tags = {
-              business-unit = ""
-              application   = "test-app"
+              business-unit = "HMPPS"
+              application   = ""
               owner         = ""
               is-production = "false"
               service-area  = "testing"
@@ -240,3 +229,54 @@ jobs:
             exit 1
           fi
           echo "✅ Empty tags correctly detected"
+
+      - name: Create test Terraform (invalid values)
+        run: |
+          mkdir -p test-terraform/invalid_values
+          cat > test-terraform/invalid_values/main.tf << 'EOF'
+          terraform {
+            required_providers {
+              aws = {
+                source  = "hashicorp/aws"
+                version = "~> 5.0"
+              }
+            }
+          }
+
+          provider "aws" {
+            region = "eu-west-2"
+            skip_credentials_validation = true
+            skip_metadata_api_check     = true
+            skip_requesting_account_id  = true
+            access_key                  = "mock"
+            secret_key                  = "mock"
+          }
+
+          resource "aws_s3_bucket" "invalid_tags" {
+            bucket = "test-bucket-invalid-tags"
+
+            tags = {
+              business-unit = "HQ"
+              application   = "test"
+              owner         = "test"
+              is-production = "false"
+              service-area  = "testing"
+              environment   = "development"
+            }
+          }
+          EOF
+
+      - name: Test invalid tags fail
+        id: invalid-tags
+        uses: ./
+        continue-on-error: true
+        with:
+          terraform_directory: test-terraform/invalid_values
+
+      - name: Verify invalid tags detected
+        run: |
+          if [ "${{ steps.empty.outputs.passed }}" = "true" ]; then
+            echo "ERROR: Invalid tags should have failed"
+            exit 1
+          fi
+          echo "✅ Invalid tags correctly detected"
