@@ -11,19 +11,6 @@ inputs:
     description: 'Path to Terraform files'
     required: true
     default: '.'
-  required_tags:
-    description: 'List of required tag keys (newline or comma-separated)'
-    required: true
-    default: |
-      business-unit
-      application
-      owner
-      is-production
-      service-area
-  framework:
-    description: 'Checkov framework to use'
-    required: false
-    default: 'terraform'
   soft_fail:
     description: 'Return exit code 0 even if violations found'
     required: false
