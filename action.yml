@@ -20,7 +20,6 @@ inputs:
       owner
       is-production
       service-area
-      environment
   framework:
     description: 'Checkov framework to use'
     required: false
@@ -75,13 +74,6 @@ runs:
         echo "🔄 Converting plan to JSON..."
         terraform show -json tfplan.binary > tfplan.json
         echo "✅ Plan generated successfully"
-
-    - name: Generate Checkov config
-      shell: bash
-      env:
-        REQUIRED_TAGS: ${{ inputs.required_tags }}
-      run: |
-        python3 ${{ github.action_path }}/scripts/generate_config.py
 
     - name: Run Checkov on plan
       id: checkov
