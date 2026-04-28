@@ -1,0 +1,49 @@
+name: Test action
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-compliant:
+    name: Compliant fixture should pass
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run action
+        uses: ./
+        with:
+          terraform_directory: tests/compliant
+
+  test-non-compliant:
+    name: ${{ matrix.case.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - name: Non-compliant resources should fail
+            dir: tests/non-compliant
+          - name: Whitespace-only tags should fail
+            dir: tests/whitespace
+          - name: Empty tags should fail
+            dir: tests/empty
+          - name: Invalid tag values should fail
+            dir: tests/invalid_values
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run action
+        id: run
+        uses: ./
+        continue-on-error: true
+        with:
+          terraform_directory: ${{ matrix.case.dir }}
+
+      - name: Assert violations were detected
+        run: |
+          if [ "${{ steps.run.outputs.passed }}" = "true" ]; then
+            echo "ERROR: Non-compliant resources should have failed"
+            exit 1
+          fi
+          echo "✅ Non-compliant resources correctly detected"
