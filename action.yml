@@ -1,4 +1,4 @@
-name: 'Checkov Tag Validator'
+name: 'COAT Tag Validator'
 description: 'Validates Terraform resources have required tags using Checkov'
 author: 'Ministry of Justice'
 
