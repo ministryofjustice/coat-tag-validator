@@ -1,0 +1,42 @@
+---
+# Configuration file for MegaLinter
+# See all available variables at https://megalinter.io/latest/config-file/ and in linters documentation
+
+APPLY_FIXES: all # all, none, or list of linter keys
+ENABLE_LINTERS:
+  - ACTION_ACTIONLINT
+  - MARKDOWN_MARKDOWNLINT
+  - REPOSITORY_GITLEAKS
+  - YAML_PRETTIER
+  - YAML_YAMLLINT
+  - PYTHON_PYLINT
+  - PYTHON_FLAKE8
+  - PYTHON_ISORT
+  - TERRAFORM_TERRAFORM_FMT
+  - TERRAFORM_TFLINT
+
+DISABLE_ERRORS: false
+SPELL_CSPELL_DISABLE_ERRORS: true
+MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
+MARKDOWN_MARKDOWNLINT_FILE_EXTENSIONS: [".md", ".erb", ".html.md.erb"]
+SHOW_ELAPSED_TIME: true
+FILEIO_REPORTER: false
+PARALLEL: true
+GITHUB_STATUS_REPORTER: true
+GITHUB_COMMENT_REPORTER: true
+VALIDATE_ALL_CODEBASE: false
+LOG_LEVEL: INFO
+MARKDOWN_MARKDOWN_LINK_CHECK_ARGUMENTS: "-q"
+
+TERRAFORM_TFLINT_UNSECURED_ENV_VARIABLES:
+  - GITHUB_TOKEN
+
+TERRAFORM_TERRASCAN_ARGUMENTS: "scan -d . -i terraform -v"
+
+# This threshold has been added as a temporary way to get around a particular error (unsupported block type).
+# Examples of this can be seen in the following issues, and appears to be a bug with Terrscan itself:
+# https://github.com/tenable/terrascan/issues/1615
+# https://github.com/tenable/terrascan/issues/1182
+# https://github.com/super-linter/super-linter/issues/3044
+
+TERRAFORM_TERRASCAN_DISABLE_ERRORS_IF_LESS_THAN: 2
