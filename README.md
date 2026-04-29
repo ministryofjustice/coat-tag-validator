@@ -65,6 +65,7 @@ jobs:
 |-------|-------------|----------|---------|
 | `terraform_directory` | Path to Terraform files | Yes | `.` |
 | `soft_fail` | Return exit code 0 even if violations found | No | `false` |
+| `terraform_workspace` | Terraform workspace | No | `` |
 
 ## Outputs
 
