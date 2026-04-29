@@ -1,6 +1,7 @@
 """
 Custom Checkov policy to validate required tags on AWS resources in Terraform plan.
-This policy works with terraform_plan framework to see tags_all and module-created resources.
+This policy works with terraform_plan framework to see tags_all and module-created 
+resources.
 """
 
 from checkov.common.models.enums import CheckCategories, CheckResult
