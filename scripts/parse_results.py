@@ -8,6 +8,14 @@ import json
 import os
 import sys
 
+def _format_details(value):
+    """Normalise Checkov's `details` field (list or str) to a single string."""
+    if isinstance(value, list):
+        return " | ".join(str(v).strip() for v in value if v)
+    if isinstance(value, str):
+        return value.strip()
+    return ""
+
 
 def parse_violations(json_file):
     """Read a Checkov JSON file and return a list of tag-violation dicts."""
@@ -37,9 +45,7 @@ def parse_violations(json_file):
                 "end_line": end_line,
                 "check": check.get("check_id", "Unknown"),
                 "message": check.get("check_name", "Missing required tags"),
-                "details": check.get("check_result", {}).get(
-                    "evaluated_keys", []
-                ),
+                "details": _format_details(check.get("details")),
             }
         )
 
