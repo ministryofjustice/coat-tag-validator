@@ -6,7 +6,7 @@ on:
 
 jobs:
   test-compliant:
-    name: Compliant fixture should pass
+    name: Case - Correctly tagged resource
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -22,13 +22,13 @@ jobs:
       fail-fast: false
       matrix:
         case:
-          - name: Non-compliant resources should fail
+          - name: Case - Missing tags
             dir: tests/non-compliant
-          - name: Whitespace-only tags should fail
+          - name: Case - Whitespace tag values
             dir: tests/whitespace
-          - name: Empty tags should fail
+          - name: Case - Empty tag values
             dir: tests/empty
-          - name: Invalid tag values should fail
+          - name: Case - Invalid tag values
             dir: tests/invalid_values
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
