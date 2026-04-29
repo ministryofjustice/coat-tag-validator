@@ -62,7 +62,7 @@ class RequiredTagsCheck(BaseResourceCheck):
                 missing.append(tag)
                 continue
 
-            tag_value = unwrap(effective_tags[tag])
+            tag_value = str(unwrap(effective_tags[tag]))
 
             if is_empty(tag_value):
                 missing.append(f"{tag} (empty)")

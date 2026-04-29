@@ -1,6 +1,6 @@
 def unwrap(value):
     if isinstance(value, list):
-        return str(value[0]) if value else None
+        return value[0] if value else None
     return value
 
 def is_empty(value):
