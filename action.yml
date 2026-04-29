@@ -15,6 +15,10 @@ inputs:
     description: 'Return exit code 0 even if violations found'
     required: false
     default: 'false'
+  workspace_name:
+    description: 'Terraform workspace name'
+    required: false
+    default: ''
 
 outputs:
   violations_count:
@@ -48,6 +52,8 @@ runs:
       id: plan
       shell: bash
       working-directory: ${{ inputs.terraform_directory }}
+      env:
+        WORKSPACE: ${{ inputs.terraform_workspace }}
       run: |
         echo "🪛 Overriding any remote backend with a local one..."
         cat > _coat_backend_override.tf <<'EOF'
@@ -58,6 +64,11 @@ runs:
 
         echo "🔧 Initializing Terraform..."
         terraform init -reconfigure -input=false
+
+        if [ -n "$WORKSPACE" ]; then
+          echo "🗂  Selecting workspace: $WORKSPACE"
+          terraform workspace select -or-create "$WORKSPACE"
+        fi
 
         echo "📝 Generating Terraform plan..."
         terraform plan -out=tfplan.binary -input=false -lock=false
