@@ -13,7 +13,7 @@ jobs:
       - name: Run action
         uses: ./
         with:
-          terraform_directory: tests/compliant
+          terraform_directory: tests/correctly_tagged
 
   test-non-compliant:
     name: ${{ matrix.case.name }}
@@ -23,11 +23,11 @@ jobs:
       matrix:
         case:
           - name: Case - Missing tags
-            dir: tests/non-compliant
+            dir: tests/missing_tags
           - name: Case - Whitespace tag values
-            dir: tests/whitespace
+            dir: tests/whitespace_values
           - name: Case - Empty tag values
-            dir: tests/empty
+            dir: tests/empty_values
           - name: Case - Invalid tag values
             dir: tests/invalid_values
     steps:
