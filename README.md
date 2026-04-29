@@ -2,16 +2,14 @@
 
 [![CI](https://github.com/ministryofjustice/coat-tag-validator/actions/workflows/ci.yml/badge.svg)](https://github.com/ministryofjustice/coat-tag-validator/actions/workflows/ci.yml)
 
-> **Shift-left tag enforcement for Terraform PRs** — Catch missing or invalid tags before they reach production.
-
-Untagged AWS resources cost organisations money and create compliance gaps. This action:
+This action:
 
 - **Prevents untagged resources** from being deployed by failing PRs with missing and invalid tags
 - **Enforces consistency** across teams by validating against a defined tag policy
 - **Reduces remediation costs** by catching issues at PR time, not after deployment
 - **Supports FinOps and compliance** by ensuring resources are properly attributed
 
-## Quick Start
+## How to use
 
 Create `.github/workflows/validate-tags.yml`:
 
