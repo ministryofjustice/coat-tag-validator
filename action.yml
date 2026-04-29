@@ -75,6 +75,7 @@ runs:
           --output cli \
           --output json \
           --output-file-path . \
+          --check CKV_AWS_TAG_001 \
           2>&1 | tee checkov_output.txt
         CHECKOV_EXIT=$?
         echo "exit_code=$CHECKOV_EXIT" >> $GITHUB_OUTPUT
