@@ -62,10 +62,10 @@ runs:
         EOF
 
         echo "🔧 Initializing Terraform..."
-        terraform init -backend=false -reconfigure
+        terraform init -reconfigure -input=false
 
         echo "📝 Generating Terraform plan..."
-        terraform plan -out=tfplan.binary
+        terraform plan -out=tfplan.binary -input=false -lock=false
 
         echo "🔄 Converting plan to JSON..."
         terraform show -json tfplan.binary > tfplan.json
