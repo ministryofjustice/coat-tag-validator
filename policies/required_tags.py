@@ -76,10 +76,6 @@ class RequiredTagsCheck(BaseResourceCheck):
             valid_tag_values = VALID_TAG_VALUES.get(tag, False)
 
             if valid_tag_values:
-
-                print(f"valid values: {valid_tag_values}")
-                print(f"value: {tag_value}")
-
                 if tag_value not in valid_tag_values:
                     invalid.append(
                         f"{tag}='{tag_value}' (valid: {', '.join(valid_tag_values)})"
