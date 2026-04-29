@@ -25,6 +25,5 @@ resource "aws_s3_bucket" "test" {
         owner         = "  "
         is-production = "false"
         service-area  = "testing"
-        environment   = "development"
     }
 }

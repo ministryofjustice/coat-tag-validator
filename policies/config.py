@@ -3,8 +3,7 @@ REQUIRED_TAGS = [
     "application",
     "owner",
     "is-production",
-    "service-area",
-    "environment",
+    "service-area"
 ]
 
 VALID_TAG_VALUES = {
