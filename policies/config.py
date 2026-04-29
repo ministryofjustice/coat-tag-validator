@@ -3,7 +3,7 @@ REQUIRED_TAGS = [
     "application",
     "owner",
     "is-production",
-    "service-area"
+    "service-area",
 ]
 
 VALID_TAG_VALUES = {
@@ -18,6 +18,6 @@ VALID_TAG_VALUES = {
         "OCTO",
         "Technology Services",
         "YJB",
-        "Platforms"
-    ]
+        "Platforms",
+    ],
 }

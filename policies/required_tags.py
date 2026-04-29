@@ -30,7 +30,7 @@ class RequiredTagsCheck(BaseResourceCheck):
             return CheckResult.UNKNOWN
 
         effective_tags = tags_all if tags_all else tags
-        
+
         if not isinstance(effective_tags, dict):
             effective_tags = {}
 
@@ -79,8 +79,11 @@ class RequiredTagsCheck(BaseResourceCheck):
                 print(f"value: {tag_value}")
 
                 if tag_value not in valid_tag_values:
-                    invalid.append(f"{tag}='{tag_value}' (valid: {', '.join(valid_tag_values)})")
+                    invalid.append(
+                        f"{tag}='{tag_value}' (valid: {', '.join(valid_tag_values)})"
+                    )
 
-        return { "missing": missing, "invalid": invalid }
+        return {"missing": missing, "invalid": invalid}
+
 
 check = RequiredTagsCheck()

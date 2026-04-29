@@ -30,7 +30,9 @@ def main():
                     file_path = check_type.get("file_path", "Unknown")
                     file_line_range = check_type.get("file_line_range", [0, 0])
                     start_line = file_line_range[0] if file_line_range else 0
-                    end_line = file_line_range[1] if len(file_line_range) > 1 else start_line
+                    end_line = (
+                        file_line_range[1] if len(file_line_range) > 1 else start_line
+                    )
 
                     violations.append(
                         {
@@ -39,8 +41,12 @@ def main():
                             "start_line": start_line,
                             "end_line": end_line,
                             "check": check_type.get("check_id", "Unknown"),
-                            "message": check_type.get("check_name", "Missing required tags"),
-                            "details": check_type.get("check_result", {}).get("evaluated_keys", []),
+                            "message": check_type.get(
+                                "check_name", "Missing required tags"
+                            ),
+                            "details": check_type.get("check_result", {}).get(
+                                "evaluated_keys", []
+                            ),
                         }
                     )
         except Exception as e:

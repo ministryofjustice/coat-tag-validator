@@ -3,6 +3,7 @@ def unwrap(value):
         return value[0] if value else None
     return value
 
+
 def is_empty(value):
     if value is None:
         return True
