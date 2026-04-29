@@ -54,12 +54,22 @@ runs:
         AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         AWS_DEFAULT_REGION: "eu-west-2"
       run: |
+        echo "🪛 Overriding any remote backend with a local one..."
+        cat > _coat_backend_override.tf <<'EOF'
+        terraform {
+          backend "local" {}
+        }
+        EOF
+
         echo "🔧 Initializing Terraform..."
         terraform init -backend=false -reconfigure
+
         echo "📝 Generating Terraform plan..."
         terraform plan -out=tfplan.binary
+
         echo "🔄 Converting plan to JSON..."
         terraform show -json tfplan.binary > tfplan.json
+        
         echo "✅ Plan generated successfully"
 
     - name: Run Checkov on plan
