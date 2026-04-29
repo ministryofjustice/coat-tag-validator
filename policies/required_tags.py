@@ -3,9 +3,6 @@ Custom Checkov policy to validate required tags on AWS resources in Terraform pl
 This policy works with terraform_plan framework to see tags_all and module-created resources.
 """
 
-import json
-import os
-
 from checkov.common.models.enums import CheckCategories, CheckResult
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
@@ -71,11 +68,11 @@ class RequiredTagsCheck(BaseResourceCheck):
                 missing.append(f"{tag} (empty)")
                 continue
 
-            valid = VALID_TAG_VALUES.get(tag)
+            valid = VALID_TAG_VALUES.get(tag, False)
+
             if valid:
-                str_value = str(value)
-                if str_value not in valid:
-                    invalid.append(f"{tag}='{str_value}' (valid: {', '.join(valid)})")
+                if value not in valid:
+                    invalid.append(f"{tag}='{value}' (valid: {', '.join(valid)})")
 
         return { "missing": missing, "invalid": invalid }
 
