@@ -1,6 +1,8 @@
 # COAT Tag Validator
 
-[![CI](https://github.com/ministryofjustice/coat-tag-validator/actions/workflows/ci.yml/badge.svg)](https://github.com/ministryofjustice/coat-tag-validator/actions/workflows/ci.yml)
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/
+coat-tag-validator/badge)](https://github-community.service.justice.gov.uk/repository-standards/
+coat-tag-validator)
 
 This action:
 
