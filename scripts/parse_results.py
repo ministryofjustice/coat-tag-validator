@@ -71,8 +71,8 @@ def build_summary(violations):
 
         lines.append(f"- **{resource}**")
         lines.append(f"  - 💡 {hint}")
-        lines.append(f"  - ❌ {v['message']}")
         lines.append(f"  - Details: {v['details']}")
+        lines.append(f"  - ❌ {v['message']}")
 
     return "\n".join(lines)
 
