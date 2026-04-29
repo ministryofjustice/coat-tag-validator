@@ -15,7 +15,7 @@ inputs:
     description: 'Return exit code 0 even if violations found'
     required: false
     default: 'false'
-  workspace_name:
+  terraform_workspace:
     description: 'Terraform workspace name'
     required: false
     default: ''
