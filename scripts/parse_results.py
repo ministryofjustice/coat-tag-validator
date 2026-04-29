@@ -8,6 +8,7 @@ import json
 import os
 import sys
 
+
 def _format_details(value):
     """Normalise Checkov's `details` field (list or str) to a single string."""
     if isinstance(value, list):
