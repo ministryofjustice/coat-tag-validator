@@ -1,6 +1,6 @@
 """
 Custom Checkov policy to validate required tags on AWS resources in Terraform plan.
-This policy works with terraform_plan framework to see tags_all and module-created 
+This policy works with terraform_plan framework to see tags_all and module-created
 resources.
 """
 
@@ -19,6 +19,7 @@ class RequiredTagsCheck(BaseResourceCheck):
             categories=[CheckCategories.GENERAL_SECURITY],
             supported_resources=["*"],
         )
+        self.details = ""
 
     def scan_resource_conf(self, conf):
         if not isinstance(conf, dict):
