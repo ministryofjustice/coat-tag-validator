@@ -56,7 +56,7 @@ runs:
         WORKSPACE: ${{ inputs.terraform_workspace }}
       run: |
         echo "🪛 Overriding any remote backend with a local one..."
-        cat > _coat_backend_override.tf <<'EOF'
+        cat > _tag_check_backend_override.tf <<'EOF'
         terraform {
           backend "local" {}
         }
