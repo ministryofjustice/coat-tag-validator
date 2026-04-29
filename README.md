@@ -31,18 +31,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Validate Tags
         id: validate
-        uses: ministryofjustice/checkov-tag-validator@v1.0.2
+        uses: ministryofjustice/checkov-tag-validator@b4b7073cb5932d2e167e3a64cb850e23dcb5b45f #v2.0.0
         with:
           terraform_directory: ./terraform
           soft_fail: false
 
       - name: Post Results to PR
         if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           SUMMARY: ${{ steps.validate.outputs.violations_summary }}
           PASSED: ${{ steps.validate.outputs.passed }}
