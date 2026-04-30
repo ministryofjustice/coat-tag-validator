@@ -43,7 +43,7 @@ jobs:
 
       - name: Validate Tags
         id: validate
-        uses: ministryofjustice/checkov-tag-validator@e0cccd30f5f5f01aa0902d42d79e5c7b32b78cbf #v2.1.0
+        uses: ministryofjustice/coat-tag-validator@e0cccd30f5f5f01aa0902d42d79e5c7b32b78cbf #v2.1.0
         with:
           terraform_directory: ./terraform
           soft_fail: false
