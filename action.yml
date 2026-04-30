@@ -15,6 +15,10 @@ inputs:
     description: 'Return exit code 0 even if violations found'
     required: false
     default: 'false'
+  terraform_workspace:
+    description: 'Terraform workspace name'
+    required: false
+    default: ''
 
 outputs:
   violations_count:
@@ -49,17 +53,25 @@ runs:
       shell: bash
       working-directory: ${{ inputs.terraform_directory }}
       env:
-        # Dummy credentials for plan generation (no actual AWS calls made)
-        AWS_ACCESS_KEY_ID: "AKIAIOSFODNN7EXAMPLE"
-        AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-        AWS_DEFAULT_REGION: "eu-west-2"
+        WORKSPACE: ${{ inputs.terraform_workspace }}
       run: |
+        echo "🪛 Overriding any remote backend with a local one..."
+        cp "${{ github.action_path }}/overrides/_tag_check_backend_override.tf" .
+
         echo "🔧 Initializing Terraform..."
-        terraform init -backend=false -reconfigure
+        terraform init -reconfigure -input=false
+
+        if [ -n "$WORKSPACE" ]; then
+          echo "🗂  Selecting workspace: $WORKSPACE"
+          terraform workspace select -or-create "$WORKSPACE"
+        fi
+
         echo "📝 Generating Terraform plan..."
-        terraform plan -out=tfplan.binary
+        terraform plan -out=tfplan.binary -input=false -lock=false
+
         echo "🔄 Converting plan to JSON..."
         terraform show -json tfplan.binary > tfplan.json
+        
         echo "✅ Plan generated successfully"
 
     - name: Run Checkov on plan
@@ -75,6 +87,7 @@ runs:
           --output cli \
           --output json \
           --output-file-path . \
+          --check CKV_AWS_TAG_001 \
           2>&1 | tee checkov_output.txt
         CHECKOV_EXIT=$?
         echo "exit_code=$CHECKOV_EXIT" >> $GITHUB_OUTPUT
