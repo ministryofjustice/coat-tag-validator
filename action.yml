@@ -45,7 +45,7 @@ runs:
       with:
         version: "latest"
         python-version: "3.12"
-        cache-suffix: "coat-tag-validator-cache-v1"
+        enable-cache: false
 
     - name: Install dependencies
       shell: bash
@@ -86,7 +86,6 @@ runs:
     - name: Parse results
       id: parse
       shell: bash
-      continue-on-error: true
       env:
         TERRAFORM_DIR: ${{ inputs.terraform_directory }}
         SOFT_FAIL: ${{ inputs.soft_fail }}
