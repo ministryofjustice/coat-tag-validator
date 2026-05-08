@@ -45,8 +45,7 @@ runs:
       with:
         version: "latest"
         python-version: "3.12"
-        cache-dependency-glob: |
-          **/coat-tag-validator-requirements.txt
+        cache-suffix: "coat-tag-validator-cache-v1"
 
     - name: Install dependencies
       shell: bash
