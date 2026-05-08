@@ -5,19 +5,17 @@ import sys
 
 
 def run(cmd):
-    result = subprocess.run(cmd, shell=True)
-    if result.returncode != 0:
-        sys.exit(result.returncode)
+    subprocess.run(cmd, shell=True, check=True)
 
 
 github_action_path = os.environ.get("GITHUB_ACTION_PATH")
 workspace = os.environ.get("WORKSPACE")
 
-source_file = f"{github_action_path}/overrides/_tag_check_backend_override.tf"
-dest_file = "./_tag_check_backend_override.tf"
+SOURCE_FILE = f"{github_action_path}/overrides/_tag_check_backend_override.tf"
+DEST_FILE = "./_tag_check_backend_override.tf"
 
 print("🪛 Overriding any remote backend with a local one...")
-shutil.copy(source_file, dest_file)
+shutil.copy(SOURCE_FILE, DEST_FILE)
 
 print("🔧 Initializing Terraform...")
 run("terraform init -reconfigure -input=false")
@@ -34,6 +32,6 @@ run("terraform show -json tfplan.binary > tfplan.json")
 
 print("✅ Plan generated successfully")
 
-if os.path.isfile(source_file):
+if os.path.isfile(SOURCE_FILE):
     print("Cleaning up plan artefacts")
-    os.remove(source_file)
+    os.remove(SOURCE_FILE)
