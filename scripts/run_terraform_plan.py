@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 
 
 def run(cmd):
