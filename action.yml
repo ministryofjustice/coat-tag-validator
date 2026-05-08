@@ -45,7 +45,7 @@ runs:
       with:
         version: "latest"
         python-version: "3.12"
-        save-cache: false
+        enable-cache: false
         cache-dependency-glob: |
           **/coat-tag-validator-requirements.txt
 
