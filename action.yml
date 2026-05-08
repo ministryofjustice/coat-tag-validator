@@ -45,11 +45,20 @@ runs:
       with:
         version: "latest"
         python-version: "3.12"
-        cache-dependency-glob: ${{ github.action_path }}/requirements.txt
+        save-cache: false
+        cache-dependency-glob: |
+          **/coat-tag-validator-requirements.txt
 
     - name: Install dependencies
       shell: bash
       run: uv pip install -r ${{ github.action_path }}/requirements.txt
+
+    - name: Manually save UV cache
+      if: ${{ steps.setup_uv.outputs.cache-hit != 'true' }}
+      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae
+      with:
+        path: ~/.cache/uv
+        key: ${{ steps.setup_uv.outputs.cache-key }}
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
