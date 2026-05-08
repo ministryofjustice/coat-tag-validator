@@ -54,25 +54,7 @@ runs:
       working-directory: ${{ inputs.terraform_directory }}
       env:
         WORKSPACE: ${{ inputs.terraform_workspace }}
-      run: |
-        echo "🪛 Overriding any remote backend with a local one..."
-        cp "${{ github.action_path }}/overrides/_tag_check_backend_override.tf" .
-
-        echo "🔧 Initializing Terraform..."
-        terraform init -reconfigure -input=false
-
-        if [ -n "$WORKSPACE" ]; then
-          echo "🗂  Selecting workspace: $WORKSPACE"
-          terraform workspace select -or-create "$WORKSPACE"
-        fi
-
-        echo "📝 Generating Terraform plan..."
-        terraform plan -out=tfplan.binary -input=false -lock=false
-
-        echo "🔄 Converting plan to JSON..."
-        terraform show -json tfplan.binary > tfplan.json
-        
-        echo "✅ Plan generated successfully"
+      run: python3 -u ${{ github.action_path }}/scripts/run_terraform_plan.py
 
     - name: Run Checkov on plan
       id: checkov
@@ -99,5 +81,4 @@ runs:
       env:
         TERRAFORM_DIR: ${{ inputs.terraform_directory }}
         SOFT_FAIL: ${{ inputs.soft_fail }}
-      run: |
-        python3 ${{ github.action_path }}/scripts/parse_results.py
+      run: python3 ${{ github.action_path }}/scripts/parse_results.py
