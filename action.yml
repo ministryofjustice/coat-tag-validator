@@ -74,6 +74,11 @@ runs:
         
         echo "✅ Plan generated successfully"
 
+        if [ -f "${{ github.action_path }}/overrides/_tag_check_backend_override.tf" ]; then
+          echo "Cleaning up plan artefacts"
+          rm "${{ github.action_path }}/overrides/_tag_check_backend_override.tf"
+        fi
+
     - name: Run Checkov on plan
       id: checkov
       shell: bash
