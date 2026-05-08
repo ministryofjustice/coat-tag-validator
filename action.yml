@@ -54,7 +54,7 @@ runs:
       working-directory: ${{ inputs.terraform_directory }}
       env:
         WORKSPACE: ${{ inputs.terraform_workspace }}
-      run: python3 ${{ github.action_path }}/scripts/run_terraform_plan.py
+      run: python3 -u ${{ github.action_path }}/scripts/run_terraform_plan.py
 
     - name: Run Checkov on plan
       id: checkov
