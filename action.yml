@@ -41,6 +41,7 @@ runs:
         version: "latest"
         python-version: "3.12"
         enable-cache: true
+        save-cache: false
         cache-dependency-glob: ${{ github.action_path }}/requirements.txt
 
     - name: Create venv and install dependencies
@@ -50,6 +51,13 @@ runs:
         echo "${{ github.action_path }}/.venv/bin" >> "$GITHUB_PATH"
         echo "VIRTUAL_ENV=${{ github.action_path }}/.venv" >> "$GITHUB_ENV"
         uv pip install --python "${{ github.action_path }}/.venv/bin/python" -r "${{ github.action_path }}/requirements.txt"
+
+    - name: Save uv cache
+      if: always() && steps.setup_uv.outputs.cache-hit != 'true'
+      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      with:
+        path: ${{ env.UV_CACHE_DIR }}
+        key: ${{ steps.setup_uv.outputs.cache-key }}
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
@@ -62,8 +70,9 @@ runs:
         mkdir -p "$HOME/.terraform.d/plugin-cache"
         echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >> "$GITHUB_ENV"
 
-    - name: Cache Terraform providers
-      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+    - name: Restore Terraform providers cache
+      id: tf_cache
+      uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
       with:
         path: ~/.terraform.d/plugin-cache
         key: tf-plugins-${{ runner.os }}-${{ inputs.terraform_directory }}-${{ hashFiles(format('{0}/.terraform.lock.hcl', inputs.terraform_directory)) }}
@@ -78,6 +87,13 @@ runs:
       env:
         WORKSPACE: ${{ inputs.terraform_workspace }}
       run: python3 -u ${{ github.action_path }}/bin/run_terraform_plan.py
+
+    - name: Save Terraform providers cache
+      if: always() && steps.tf_cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      with:
+        path: ~/.terraform.d/plugin-cache
+        key: ${{ steps.tf_cache.outputs.cache-primary-key }}
 
     - name: Run Checkov on plan
       id: checkov
