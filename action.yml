@@ -64,22 +64,6 @@ runs:
       with:
         terraform_wrapper: false
 
-    - name: Configure Terraform plugin cache dir
-      shell: bash
-      run: |
-        mkdir -p "$HOME/.terraform.d/plugin-cache"
-        echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >> "$GITHUB_ENV"
-
-    - name: Restore Terraform providers cache
-      id: tf_cache
-      uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-      with:
-        path: ~/.terraform.d/plugin-cache
-        key: tf-plugins-${{ runner.os }}-${{ inputs.terraform_directory }}-${{ hashFiles(format('{0}/.terraform.lock.hcl', inputs.terraform_directory)) }}
-        restore-keys: |
-          tf-plugins-${{ runner.os }}-${{ inputs.terraform_directory }}-
-          tf-plugins-${{ runner.os }}-
-
     - name: Generate Terraform plan
       id: plan
       shell: bash
@@ -87,13 +71,6 @@ runs:
       env:
         WORKSPACE: ${{ inputs.terraform_workspace }}
       run: python3 -u ${{ github.action_path }}/bin/run_terraform_plan.py
-
-    - name: Save Terraform providers cache
-      if: always() && steps.tf_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-      with:
-        path: ~/.terraform.d/plugin-cache
-        key: ${{ steps.tf_cache.outputs.cache-primary-key }}
 
     - name: Run Checkov on plan
       id: checkov
