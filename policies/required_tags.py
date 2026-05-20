@@ -35,6 +35,9 @@ class RequiredTagsCheck(BaseResourceCheck):
         # Account for untaggable resources - will not have a tags key
         if not tags:
             return CheckResult.PASSED
+        # Account for completely empty tag set
+        elif tags == [None]:
+            tags = []
         
         # use tags_all as ultimate source of tags, unless tags is populated and tags_all is not (edge case)
         effective_tags = tags_all if tags_all else tags
