@@ -35,9 +35,9 @@ class RequiredTagsCheck(BaseResourceCheck):
         if tags == "no tags key":
             return CheckResult.PASSED
         
-        # Account for absence of tag set
+        # Account for absence of tag set - set default tags_all empty list 
         if tags == [None]:
-            tags = []
+            tags_all = []
 
         processed_tags = self.parse_tags(unwrap(tags_all))
 
