@@ -27,17 +27,17 @@ class RequiredTagsCheck(BaseResourceCheck):
             return CheckResult.UNKNOWN
 
         print(conf)
-        tags = conf.get("tags", "no tags key")
+        tags = conf.get("tags", [])
         print(f"tags: {tags}")
         tags_all = conf.get("tags_all", [])
         print(f"tags_all: {tags_all}")
 
         # Account for untaggable resources - will not have a tags key
-        if tags == "no tags key":
+        if not tags:
             return CheckResult.PASSED
         
         # use tags_all as ultimate source of tags, unless tags is populated and tags_all is not (edge case)
-        effective_tags = tags if tags and not tags_all else tags_all
+        effective_tags = tags_all if tags_all else tags
 
         processed_tags = self.parse_tags(unwrap(effective_tags))
 
