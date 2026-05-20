@@ -19,6 +19,10 @@ inputs:
     description: 'Terraform workspace name'
     required: false
     default: ''
+  terraform_plan_backend:
+    description: 'Terraform backend for plan — local plans all resources in the module; remote uses your configured backend and state'
+    required: false
+    default: 'local'
 
 outputs:
   violations_count:
@@ -70,6 +74,7 @@ runs:
       working-directory: ${{ inputs.terraform_directory }}
       env:
         WORKSPACE: ${{ inputs.terraform_workspace }}
+        TERRAFORM_PLAN_BACKEND: ${{ inputs.terraform_plan_backend }}
       run: python3 -u ${{ github.action_path }}/bin/run_terraform_plan.py
 
     - name: Run Checkov on plan

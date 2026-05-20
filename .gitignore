@@ -1,3 +1,9 @@
 __pycache__/
-
-
+.venv/
+.terraform/
+.terraform.lock.hcl
+tfplan.binary
+tfplan.json
+**/tfplan.json
+_tag_check_backend_override.tf
+.terraform.tfstate*

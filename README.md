@@ -69,15 +69,16 @@ jobs:
 ## Inputs
 
 | Input | Description | Required | Default |
-|-------|-------------|----------|---------|
+| ------- | ------------- | ---------- | --------- |
 | `terraform_directory` | Path to Terraform files | Yes | `.` |
 | `soft_fail` | Return exit code 0 even if violations found | No | `false` |
 | `terraform_workspace` | Terraform workspace | No | `` |
+| `terraform_plan_backend` | `local` plans all resources via a temporary local backend override (default). `remote` uses your configured backend and state (requires credentials). | No | `local` |
 
 ## Outputs
 
 | Output | Description |
-|--------|-------------|
+| ------- | ----------- |
 | `violations_count` | Number of tag violations found |
 | `violations_summary` | Markdown summary for PR comments |
 | `passed` | Whether validation passed (`true`/`false`) |
