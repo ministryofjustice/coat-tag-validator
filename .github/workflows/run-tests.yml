@@ -6,14 +6,24 @@ on:
 
 jobs:
   test-compliant:
+    name: ${{ matrix.case.name }}
     name: Case - Correctly tagged resource
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - name: Case - Correctly tagged resource
+            dir: tests/correctly_tagged
+          - name: Case - Untaggable resource
+            dir: tests/untaggable_resource
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
       - name: Run action
         uses: ./
         with:
-          terraform_directory: tests/correctly_tagged
+          terraform_directory: ${{ matrix.case.dir }}
 
   test-non-compliant:
     name: ${{ matrix.case.name }}
@@ -32,8 +42,6 @@ jobs:
             dir: tests/empty_values
           - name: Case - Invalid tag values
             dir: tests/invalid_values
-          - name: Case - Untaggable resource
-            dir: tests/untaggable_resource
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
