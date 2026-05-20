@@ -27,7 +27,9 @@ class RequiredTagsCheck(BaseResourceCheck):
             return CheckResult.UNKNOWN
 
         tags = conf.get("tags", "no tags key")
+        print(f"tags: {tags}")
         tags_all = conf.get("tags_all", [])
+        print(f"tags_all: {tags_all}")
 
         # Account for untaggable resources - will not have a tags key
         if tags == "no tags key":
