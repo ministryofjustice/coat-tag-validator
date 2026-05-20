@@ -26,8 +26,10 @@ class RequiredTagsCheck(BaseResourceCheck):
             return CheckResult.UNKNOWN
 
         tags = unwrap(conf.get("tags"))
+        print(f"tags: {conf.get("tags")}")
         tags_all = unwrap(conf.get("tags_all"))
-
+        print(f"tags_all: {conf.get("tags_all")}")
+        
         if tags is None and tags_all is None:
             return CheckResult.UNKNOWN
 
