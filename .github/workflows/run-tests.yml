@@ -7,7 +7,6 @@ on:
 jobs:
   test-compliant:
     name: ${{ matrix.case.name }}
-    name: Case - Correctly tagged resource
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
