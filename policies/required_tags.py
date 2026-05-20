@@ -25,6 +25,7 @@ class RequiredTagsCheck(BaseResourceCheck):
         if not isinstance(conf, dict):
             return CheckResult.UNKNOWN
 
+        print(conf)
         tags = unwrap(conf.get("tags"))
         print(f"tags: {conf.get("tags")}")
         tags_all = unwrap(conf.get("tags_all"))
