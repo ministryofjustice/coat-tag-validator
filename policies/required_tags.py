@@ -22,24 +22,18 @@ class RequiredTagsCheck(BaseResourceCheck):
         self.details = ""
 
     def scan_resource_conf(self, conf):
+        # Ensure configuration is a dictionary data type
         if not isinstance(conf, dict):
             return CheckResult.UNKNOWN
 
-        print(conf)
-        tags = unwrap(conf.get("tags"))
-        print(f"tags: {conf.get("tags")}")
-        tags_all = unwrap(conf.get("tags_all"))
-        print(f"tags_all: {conf.get("tags_all")}")
-        
-        if tags is None and tags_all is None:
-            return CheckResult.UNKNOWN
+        tags = conf.get("tags", "no tags key")
+        tags_all = conf.get("tags_all", [])
 
-        effective_tags = tags_all if tags_all else tags
+        # Account for untaggable resources - will not have a tags key
+        if tags == "no tags key":
+            return CheckResult.PASSED
 
-        if not isinstance(effective_tags, dict):
-            effective_tags = {}
-
-        processed_tags = self.parse_tags(effective_tags)
+        processed_tags = self.parse_tags(tags_all)
 
         missing = processed_tags.get("missing", [])
         invalid = processed_tags.get("invalid", [])
@@ -58,16 +52,16 @@ class RequiredTagsCheck(BaseResourceCheck):
 
         return CheckResult.PASSED
 
-    def parse_tags(self, effective_tags):
+    def parse_tags(self, tags):
         missing = []
         invalid = []
 
         for tag in REQUIRED_TAGS:
-            if tag not in effective_tags:
+            if tag not in tags:
                 missing.append(tag)
                 continue
 
-            tag_value = unwrap(effective_tags[tag])
+            tag_value = unwrap(tags[tag])
 
             if is_empty(tag_value):
                 missing.append(f"{tag} (empty)")
