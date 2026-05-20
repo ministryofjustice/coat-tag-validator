@@ -22,10 +22,6 @@ class RequiredTagsCheck(BaseResourceCheck):
         self.details = ""
 
     def scan_resource_conf(self, conf):
-        # Ensure configuration is a dictionary data type
-        if not isinstance(conf, dict):
-            return CheckResult.UNKNOWN
-
         tags = conf.get("tags", [])
         tags_all = conf.get("tags_all", [])
 
