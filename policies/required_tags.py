@@ -35,8 +35,11 @@ class RequiredTagsCheck(BaseResourceCheck):
         # Account for untaggable resources - will not have a tags key
         if tags == "no tags key":
             return CheckResult.PASSED
+        
+        # use tags_all as ultimate source of tags, unless tags is populated and tags_all is not (edge case)
+        effective_tags = tags if tags and not tags_all else tags_all
 
-        processed_tags = self.parse_tags(unwrap(tags_all))
+        processed_tags = self.parse_tags(unwrap(effective_tags))
 
         missing = processed_tags.get("missing", [])
         invalid = processed_tags.get("invalid", [])
