@@ -22,14 +22,18 @@ jobs:
       fail-fast: false
       matrix:
         case:
-          - name: Case - Missing tags
-            dir: tests/missing_tags
+          - name: Case - Missing all tags
+            dir: tests/missing_all_tags
+          - name: Case - Missing tag
+            dir: tests/missing_tag
           - name: Case - Whitespace tag values
             dir: tests/whitespace_values
           - name: Case - Empty tag values
             dir: tests/empty_values
           - name: Case - Invalid tag values
             dir: tests/invalid_values
+          - name: Case - Untaggable resource
+            dir: tests/untaggable_resource
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
