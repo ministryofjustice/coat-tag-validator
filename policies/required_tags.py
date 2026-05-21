@@ -40,7 +40,11 @@ class RequiredTagsCheck(BaseResourceCheck):
 
         processed_tags = self.parse_tags(unwrap_tags(effective_tags))
 
-        self.parse_results(processed_tags)
+        if not self.parse_results(processed_tags):
+            return CheckResult.FAILED
+        
+        return CheckResult.PASSED
+
 
 
     def parse_tags(self, tags):
@@ -86,9 +90,9 @@ class RequiredTagsCheck(BaseResourceCheck):
 
         if problems:
             self.details = " | ".join(problems)
-            return CheckResult.FAILED
+            return False
 
-        return CheckResult.PASSED
+        return True
 
 
 check = RequiredTagsCheck()
