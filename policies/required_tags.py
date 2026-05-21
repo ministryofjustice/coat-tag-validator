@@ -70,7 +70,8 @@ class RequiredTagsCheck(BaseResourceCheck):
                     )
 
         return {"missing": missing, "invalid": invalid}
-    
+
+
     def parse_results(self, processed_tags):
         missing = processed_tags.get("missing", [])
         invalid = processed_tags.get("invalid", [])
