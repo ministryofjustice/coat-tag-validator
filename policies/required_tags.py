@@ -22,8 +22,6 @@ class RequiredTagsCheck(BaseResourceCheck):
         self.details = ""
 
     def scan_resource_conf(self, conf):
-        print(f"Debug: {conf}")
-        
         tags = conf.get("tags", [])
         tags_all = conf.get("tags_all", [])
 
@@ -33,7 +31,7 @@ class RequiredTagsCheck(BaseResourceCheck):
             return CheckResult.PASSED
 
         # Account for completely empty tag set
-        if tags == [None]:
+        if tags == [None] and not tags_all:
             tags = []
 
         # use tags_all as ultimate source of tags,
