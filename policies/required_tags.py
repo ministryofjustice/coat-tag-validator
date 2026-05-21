@@ -40,22 +40,8 @@ class RequiredTagsCheck(BaseResourceCheck):
 
         processed_tags = self.parse_tags(unwrap_tags(effective_tags))
 
-        missing = processed_tags.get("missing", [])
-        invalid = processed_tags.get("invalid", [])
+        self.parse_results(processed_tags)
 
-        problems = []
-
-        if missing:
-            problems.append(f"Missing tags: {', '.join(missing)}")
-
-        if invalid:
-            problems.append(f"Invalid values: {'; '.join(invalid)}")
-
-        if problems:
-            self.details = " | ".join(problems)
-            return CheckResult.FAILED
-
-        return CheckResult.PASSED
 
     def parse_tags(self, tags):
         missing = []
@@ -84,6 +70,24 @@ class RequiredTagsCheck(BaseResourceCheck):
                     )
 
         return {"missing": missing, "invalid": invalid}
+    
+    def parse_results(self, processed_tags):
+        missing = processed_tags.get("missing", [])
+        invalid = processed_tags.get("invalid", [])
+
+        problems = []
+
+        if missing:
+            problems.append(f"Missing tags: {', '.join(missing)}")
+
+        if invalid:
+            problems.append(f"Invalid values: {'; '.join(invalid)}")
+
+        if problems:
+            self.details = " | ".join(problems)
+            return CheckResult.FAILED
+
+        return CheckResult.PASSED
 
 
 check = RequiredTagsCheck()
