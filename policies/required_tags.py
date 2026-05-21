@@ -42,10 +42,8 @@ class RequiredTagsCheck(BaseResourceCheck):
 
         if not self.parse_results(processed_tags):
             return CheckResult.FAILED
-        
+
         return CheckResult.PASSED
-
-
 
     def parse_tags(self, tags):
         missing = []
@@ -74,7 +72,6 @@ class RequiredTagsCheck(BaseResourceCheck):
                     )
 
         return {"missing": missing, "invalid": invalid}
-
 
     def parse_results(self, processed_tags):
         missing = processed_tags.get("missing", [])
