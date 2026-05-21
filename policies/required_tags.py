@@ -22,6 +22,8 @@ class RequiredTagsCheck(BaseResourceCheck):
         self.details = ""
 
     def scan_resource_conf(self, conf):
+        print(conf)
+        
         tags = conf.get("tags", [])
         tags_all = conf.get("tags_all", [])
 
