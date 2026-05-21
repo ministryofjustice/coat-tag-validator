@@ -8,7 +8,7 @@ from checkov.common.models.enums import CheckCategories, CheckResult
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
 from config import VALID_TAG_VALUES, REQUIRED_TAGS
-from helpers import unwrap, is_empty
+from helpers import unwrap_tags, unwrap_tag_value, is_empty
 
 
 class RequiredTagsCheck(BaseResourceCheck):
@@ -38,7 +38,7 @@ class RequiredTagsCheck(BaseResourceCheck):
         # unless tags is populated and tags_all is not (edge case)
         effective_tags = tags if tags and not tags_all else tags_all
 
-        processed_tags = self.parse_tags(unwrap(effective_tags))
+        processed_tags = self.parse_tags(unwrap_tags(effective_tags))
 
         missing = processed_tags.get("missing", [])
         invalid = processed_tags.get("invalid", [])
@@ -66,7 +66,7 @@ class RequiredTagsCheck(BaseResourceCheck):
                 missing.append(tag)
                 continue
 
-            tag_value = unwrap(tags[tag])
+            tag_value = unwrap_tag_value(tags[tag])
 
             if is_empty(tag_value):
                 missing.append(f"{tag} (empty)")
