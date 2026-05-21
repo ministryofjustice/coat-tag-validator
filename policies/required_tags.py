@@ -25,8 +25,9 @@ class RequiredTagsCheck(BaseResourceCheck):
         tags = conf.get("tags", [])
         tags_all = conf.get("tags_all", [])
 
-        # Account for untaggable resources - will not have a tags key
-        if not tags:
+        # Account for untaggable resources -
+        # will not have a tags or tags all keys
+        if not tags and not tags_all:
             return CheckResult.PASSED
 
         # Account for completely empty tag set
