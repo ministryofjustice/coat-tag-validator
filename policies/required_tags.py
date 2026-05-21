@@ -36,7 +36,7 @@ class RequiredTagsCheck(BaseResourceCheck):
 
         # use tags_all as ultimate source of tags,
         # unless tags is populated and tags_all is not (edge case)
-        effective_tags = tags_all if tags_all else tags
+        effective_tags = tags if tags and not tags_all else tags_all
 
         processed_tags = self.parse_tags(unwrap(effective_tags))
 
