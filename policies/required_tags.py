@@ -8,7 +8,7 @@ from checkov.common.models.enums import CheckCategories, CheckResult
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
 from config import VALID_TAG_VALUES, REQUIRED_TAGS
-from helpers import unwrap, is_empty
+from helpers import unwrap_tags, unwrap_tag_value, is_empty
 
 
 class RequiredTagsCheck(BaseResourceCheck):
@@ -22,49 +22,39 @@ class RequiredTagsCheck(BaseResourceCheck):
         self.details = ""
 
     def scan_resource_conf(self, conf):
-        if not isinstance(conf, dict):
-            return CheckResult.UNKNOWN
+        tags = conf.get("tags", [])
+        tags_all = conf.get("tags_all", [])
 
-        tags = unwrap(conf.get("tags"))
-        tags_all = unwrap(conf.get("tags_all"))
+        # Account for untaggable resources -
+        # will not have a tags or tags all keys
+        if not tags and not tags_all:
+            return CheckResult.PASSED
 
-        if tags is None and tags_all is None:
-            return CheckResult.UNKNOWN
+        # Account for completely empty tag set
+        if tags == [None] and not tags_all:
+            tags = []
 
-        effective_tags = tags_all if tags_all else tags
+        # use tags_all as ultimate source of tags,
+        # unless tags is populated and tags_all is not (edge case)
+        effective_tags = tags if tags and not tags_all else tags_all
 
-        if not isinstance(effective_tags, dict):
-            effective_tags = {}
+        processed_tags = self.parse_tags(unwrap_tags(effective_tags))
 
-        processed_tags = self.parse_tags(effective_tags)
-
-        missing = processed_tags.get("missing", [])
-        invalid = processed_tags.get("invalid", [])
-
-        problems = []
-
-        if missing:
-            problems.append(f"Missing tags: {', '.join(missing)}")
-
-        if invalid:
-            problems.append(f"Invalid values: {'; '.join(invalid)}")
-
-        if problems:
-            self.details = " | ".join(problems)
+        if not self.parse_results(processed_tags):
             return CheckResult.FAILED
 
         return CheckResult.PASSED
 
-    def parse_tags(self, effective_tags):
+    def parse_tags(self, tags):
         missing = []
         invalid = []
 
         for tag in REQUIRED_TAGS:
-            if tag not in effective_tags:
+            if tag not in tags:
                 missing.append(tag)
                 continue
 
-            tag_value = unwrap(effective_tags[tag])
+            tag_value = unwrap_tag_value(tags[tag])
 
             if is_empty(tag_value):
                 missing.append(f"{tag} (empty)")
@@ -82,6 +72,24 @@ class RequiredTagsCheck(BaseResourceCheck):
                     )
 
         return {"missing": missing, "invalid": invalid}
+
+    def parse_results(self, processed_tags):
+        missing = processed_tags.get("missing", [])
+        invalid = processed_tags.get("invalid", [])
+
+        problems = []
+
+        if missing:
+            problems.append(f"Missing tags: {', '.join(missing)}")
+
+        if invalid:
+            problems.append(f"Invalid values: {'; '.join(invalid)}")
+
+        if problems:
+            self.details = " | ".join(problems)
+            return False
+
+        return True
 
 
 check = RequiredTagsCheck()
