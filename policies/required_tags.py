@@ -86,7 +86,6 @@ class RequiredTagsCheck(BaseResourceCheck):
             problems.append(f"Invalid values: {'; '.join(invalid)}")
 
         if problems:
-            # self.details = " | ".join(problems)
             self.details = problems
             return False
 
