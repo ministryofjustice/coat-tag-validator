@@ -11,10 +11,6 @@ inputs:
     description: 'Path to Terraform files'
     required: true
     default: '.'
-  soft_fail:
-    description: 'Return exit code 0 even if violations found'
-    required: false
-    default: 'false'
   terraform_workspace:
     description: 'Terraform workspace name'
     required: false
@@ -92,6 +88,4 @@ runs:
     #   id: parse
     #   shell: bash
     #   working-directory: ${{ inputs.terraform_directory }}
-    #   env:
-    #     SOFT_FAIL: ${{ inputs.soft_fail }}
     #   run: python3 ${{ github.action_path }}/bin/parse_results.py
