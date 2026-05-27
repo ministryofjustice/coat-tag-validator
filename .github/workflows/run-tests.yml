@@ -4,9 +4,6 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  pull-requests: write
-
 jobs:
   test-compliant:
     name: ${{ matrix.case.name }}
