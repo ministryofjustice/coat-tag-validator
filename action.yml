@@ -87,6 +87,7 @@ runs:
         checkov -f tfplan.json \
           --framework terraform_plan \
           --external-checks-dir ${{ github.action_path }}/policies \
+          --output github_failed_only
           --output cli \
           --output json \
           --output-file-path . \
@@ -96,10 +97,10 @@ runs:
         echo "exit_code=$CHECKOV_EXIT" >> $GITHUB_OUTPUT
         set -e
 
-    - name: Parse results
-      id: parse
-      shell: bash
-      working-directory: ${{ inputs.terraform_directory }}
-      env:
-        SOFT_FAIL: ${{ inputs.soft_fail }}
-      run: python3 ${{ github.action_path }}/bin/parse_results.py
+    # - name: Parse results
+    #   id: parse
+    #   shell: bash
+    #   working-directory: ${{ inputs.terraform_directory }}
+    #   env:
+    #     SOFT_FAIL: ${{ inputs.soft_fail }}
+    #   run: python3 ${{ github.action_path }}/bin/parse_results.py
