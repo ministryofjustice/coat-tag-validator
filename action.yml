@@ -96,10 +96,10 @@ runs:
         echo "exit_code=$CHECKOV_EXIT" >> $GITHUB_OUTPUT
         set -e
 
-    # - name: Parse results
-    #   id: parse
-    #   shell: bash
-    #   env:
-    #     TERRAFORM_DIR: ${{ inputs.terraform_directory }}
-    #     SOFT_FAIL: ${{ inputs.soft_fail }}
-    #   run: python3 ${{ github.action_path }}/bin/parse_results.py
+    - name: Parse results
+      id: parse
+      shell: bash
+      working-directory: ${{ inputs.terraform_directory }}
+      env:
+        SOFT_FAIL: ${{ inputs.soft_fail }}
+      run: python3 ${{ github.action_path }}/bin/parse_results.py

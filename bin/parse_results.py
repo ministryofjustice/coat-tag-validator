@@ -79,11 +79,10 @@ def build_summary(violations):
 
 
 def main():
-    terraform_dir = os.environ.get("TERRAFORM_DIR", ".")
     soft_fail = os.environ.get("SOFT_FAIL", "false").lower() == "true"
     github_output = os.environ.get("GITHUB_OUTPUT", "")
 
-    json_files = glob.glob(os.path.join(terraform_dir, "results_*.json"))
+    json_files = glob.glob("./results_*.json")
 
     violations = []
     for json_file in json_files:
