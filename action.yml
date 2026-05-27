@@ -78,11 +78,31 @@ runs:
       shell: bash
       working-directory: ${{ inputs.terraform_directory }}
       run: |
+        set +e
         checkov -f tfplan.json \
           --framework terraform_plan \
           --external-checks-dir ${{ github.action_path }}/policies \
           --output cli \
-          --check CKV_AWS_TAG_001
+          --check CKV_AWS_TAG_001 \
+          --output-file-path .
+        
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+        set -e
+
+    - name: Post Checkov Table to PR
+      if: always() && github.event_name == 'pull_request'
+      uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0
+      with:
+        header: checkov-scan
+        path: ${{ inputs.terraform_directory }}/results_cli.txt
+
+    - name: Fail workflow if Checkov failed
+      if: always()
+      shell: bash
+      run: |
+        if [ "${{ steps.checkov.outputs.exit_code }}" -ne 0 ]; then
+          exit ${{ steps.checkov.outputs.exit_code }}
+        fi
 
     # - name: Parse results
     #   id: parse
