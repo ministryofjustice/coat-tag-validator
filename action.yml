@@ -85,9 +85,9 @@ runs:
           --check CKV_AWS_TAG_001 \
           --output cli \
           --output json \
-          --output-file-path console,checkov_output \
-        && ls ./checkov_output
+          --output-file-path console,./results_json.json \
 
+        ls ./checkov_output
         echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
 
