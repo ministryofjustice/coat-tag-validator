@@ -82,7 +82,7 @@ def main():
     soft_fail = os.environ.get("SOFT_FAIL", "false").lower() == "true"
     github_output = os.environ.get("GITHUB_OUTPUT", "")
 
-    json_files = glob.glob("./results_json.json")
+    json_files = glob.glob("./checkov_output/results_json.json")
 
     violations = []
     for json_file in json_files:
