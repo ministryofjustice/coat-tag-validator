@@ -82,18 +82,11 @@ runs:
       shell: bash
       working-directory: ${{ inputs.terraform_directory }}
       run: |
-        set +e
-        # Use terraform_plan framework to scan plan JSON (sees tags_all and module resources)
         checkov -f tfplan.json \
           --framework terraform_plan \
           --external-checks-dir ${{ github.action_path }}/policies \
           --output cli \
-          --output-file-path . \
-          --check CKV_AWS_TAG_001 \
-          2>&1 | tee checkov_output.txt
-        CHECKOV_EXIT=$?
-        echo "exit_code=$CHECKOV_EXIT" >> $GITHUB_OUTPUT
-        set -e
+          --check CKV_AWS_TAG_001
 
     # - name: Parse results
     #   id: parse
