@@ -87,7 +87,6 @@ runs:
           --output json \
           --output-file-path console,./results_json.json \
 
-        ls ./checkov_output
         echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
 
