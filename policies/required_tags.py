@@ -41,6 +41,7 @@ class RequiredTagsCheck(BaseResourceCheck):
         processed_tags = self.parse_tags(unwrap_tags(effective_tags))
 
         if not self.parse_results(processed_tags):
+            print(f"details (debug): {self.details}")
             return CheckResult.FAILED
 
         return CheckResult.PASSED
