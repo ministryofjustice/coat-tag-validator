@@ -41,7 +41,6 @@ class RequiredTagsCheck(BaseResourceCheck):
         processed_tags = self.parse_tags(unwrap_tags(effective_tags))
 
         if not self.parse_results(processed_tags):
-            print(f"details (debug): {self.details}")
             return CheckResult.FAILED
 
         return CheckResult.PASSED
@@ -87,7 +86,8 @@ class RequiredTagsCheck(BaseResourceCheck):
             problems.append(f"Invalid values: {'; '.join(invalid)}")
 
         if problems:
-            self.details = " | ".join(problems)
+            # self.details = " | ".join(problems)
+            self.details = problems
             return False
 
         return True
