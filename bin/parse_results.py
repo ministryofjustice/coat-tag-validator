@@ -92,9 +92,6 @@ def main():
     passed = violations_count == 0
     summary = build_summary(violations)
 
-    print(f"\n📊 Violations: {violations_count}")
-    print(summary)
-
     if github_output:
         with open(github_output, "a", encoding="utf-8") as f:
             f.write(f"violations_count={violations_count}\n")
