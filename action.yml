@@ -84,7 +84,7 @@ runs:
           --external-checks-dir ${{ github.action_path }}/policies \
           --output cli \
           --check CKV_AWS_TAG_001 \
-          --output-file-path .
+          --output-file-path console,.
         
         echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
