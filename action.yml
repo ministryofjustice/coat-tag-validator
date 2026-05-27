@@ -83,9 +83,9 @@ runs:
           --framework terraform_plan \
           --external-checks-dir ${{ github.action_path }}/policies \
           --check CKV_AWS_TAG_001 \
+          --output cli \
           --output json \
-          --output-file-path . \
-          > /dev/null
+          --output-file-path console,./results_json.json \
 
         echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
