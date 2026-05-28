@@ -41,19 +41,13 @@ def main():
 
     violations = parse_violations(results_file_path)
 
-    violations_count = violations.get("violation_count", 0)
-    summary = violations.get("summary", "")
-    passed = violations_count == 0
-
-    print(summary)
+    print(violations.get("summary", ""))
 
     if github_output:
         with open(github_output, "a", encoding="utf-8") as f:
-            f.write(f"violations_count={violations_count}\n")
-            f.write(f"passed={str(passed).lower()}\n")
-            f.write(f"violations_summary<<EOF\n{summary}\nEOF\n")
+            f.write(f"violations_summary<<EOF\n{violations.get("summary", "")}\nEOF\n")
 
-    if not passed:
+    if not violations.get("violation_count", 0) == 0:
         sys.exit(1)
 
 
