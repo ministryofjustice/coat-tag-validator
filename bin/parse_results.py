@@ -27,27 +27,22 @@ def extract_checkov_results(results_dict):
 
     return violations
 
-def build_summary(violations):
-    """Build a markdown summary string from a list of violations."""
-    if not violations:
-        return "✅ **All resources have required tags**"
-
+def build_mrkdwn_summary(violations):
     lines = [f"❌ **Found {len(violations)} tag violation(s)**\n"]
-    for v in violations:
-        resource = v["resource"]
-        if resource.startswith("module."):
-            module_name = resource.split(".")[1]
-            hint = f"Check `modules/{module_name}/`"
-        else:
-            resource_name = (
-                resource.split(".")[1] if "." in resource else resource
-            )
-            hint = f'Look for `resource ... "{resource_name}"`'
+    for violation in violations:
+        # resource = v["resource"]
+        # if resource.startswith("module."):
+        #     module_name = resource.split(".")[1]
+        #     hint = f"Check `modules/{module_name}/`"
+        # else:
+        #     resource_name = (
+        #         resource.split(".")[1] if "." in resource else resource
+        #     )
+        #     hint = f'Look for `resource ... "{resource_name}"`'
 
-        lines.append(f"- **{resource}**")
-        lines.append(f"  - 💡 {hint}")
-        lines.append(f"  - Details: {v['details']}")
-        lines.append(f"  - ❌ {v['message']}")
+        lines.append(f"- Resource: {violation.get("resource", "")}")
+        lines.append(f"  - ❌ {violation.get('message', "")}")
+        lines.append(f"  - Details: {violation.get('details', "")}")
 
     return "\n".join(lines)
 
@@ -60,7 +55,7 @@ def main():
 
     violations_count = len(violations)
     passed = violations_count == 0
-    summary = build_summary(violations)
+    summary = build_mrkdwn_summary(violations) if violations else "✅ **All resources have required tags**"
 
     print(f"\n📊 Violations: {violations_count}")
     print(summary)
