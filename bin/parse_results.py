@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Parses Checkov JSON output and generates GitHub Action outputs.
-"""
-
 import json
 import os
 import sys
