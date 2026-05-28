@@ -4,7 +4,6 @@ import sys
 
 
 def parse_violations(json_file):
-    """Read a Checkov JSON file and return a list of tag-violation dicts."""
     violations = []
     try:
         with open(json_file, encoding="utf-8") as f:
