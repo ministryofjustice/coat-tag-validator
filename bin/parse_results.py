@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 
 
 def parse_violations(json_file):
