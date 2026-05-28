@@ -80,12 +80,9 @@ def build_summary(violations):
 
 def main():
     github_output = os.environ.get("GITHUB_OUTPUT", "")
+    results_file_path = "./results_json.json"
 
-    json_files = glob.glob("./results_json.json")
-
-    violations = []
-    for json_file in json_files:
-        violations.extend(parse_violations(json_file))
+    violations = parse_violations(results_file_path)
 
     violations_count = len(violations)
     passed = violations_count == 0
