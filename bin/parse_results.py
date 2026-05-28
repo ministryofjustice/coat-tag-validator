@@ -14,13 +14,14 @@ def parse_violations(json_file):
 
     return extract_checkov_results(results)
 
+
 def extract_checkov_results(results_dict):
     unpacked_checks = results_dict.get("results", {}).get("failed_checks", [])
 
     if not unpacked_checks:
         return {
             "summary": "✅ **All resources have required tags**",
-            "violation_count": 0
+            "violation_count": 0,
         }
 
     summary_lines = [f"❌ **Found {len(unpacked_checks)} tag violation(s)**\n"]
@@ -31,7 +32,7 @@ def extract_checkov_results(results_dict):
 
     return {
         "summary": "\n".join(summary_lines),
-        "violation_count": len(unpacked_checks)
+        "violation_count": len(unpacked_checks),
     }
 
 
