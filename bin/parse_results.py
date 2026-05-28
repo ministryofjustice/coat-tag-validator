@@ -29,23 +29,10 @@ def parse_violations(json_file):
         return violations
 
     for check in results.get("results", {}).get("failed_checks", []):
-        if "CKV_AWS_TAG" not in check.get("check_id", ""):
-            continue
-
-        file_line_range = check.get("file_line_range", [0, 0])
-        start_line = file_line_range[0] if file_line_range else 0
-        end_line = (
-            file_line_range[1] if len(file_line_range) > 1 else start_line
-        )
-
         violations.append(
             {
-                "resource": check.get("resource", "Unknown"),
-                "file": check.get("file_path", "Unknown"),
-                "start_line": start_line,
-                "end_line": end_line,
-                "check": check.get("check_id", "Unknown"),
-                "message": check.get("check_name", "Missing required tags"),
+                "resource": check.get("resource", ""),
+                "message": check.get("check_name", ""),
                 "details": _format_details(check.get("details")),
             }
         )
