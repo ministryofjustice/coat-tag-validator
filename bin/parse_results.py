@@ -79,7 +79,6 @@ def build_summary(violations):
 
 
 def main():
-    soft_fail = os.environ.get("SOFT_FAIL", "false").lower() == "true"
     github_output = os.environ.get("GITHUB_OUTPUT", "")
 
     json_files = glob.glob("./results_json.json")
