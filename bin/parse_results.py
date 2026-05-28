@@ -27,19 +27,20 @@ def extract_checkov_results(results_dict):
             {
                 "resource": check.get("resource", ""),
                 "message": check.get("check_name", ""),
-                "details": _format_details(check.get("details")),
+                # "details": _format_details(check.get("details")),
+                "details": check.get("details"),
             }
         )
 
     return violations
 
-def _format_details(value):
-    """Normalise Checkov's `details` field (list or str) to a single string."""
-    if isinstance(value, list):
-        return " | ".join(str(v).strip() for v in value if v)
-    if isinstance(value, str):
-        return value.strip()
-    return ""
+# def _format_details(value):
+#     """Normalise Checkov's `details` field (list or str) to a single string."""
+#     if isinstance(value, list):
+#         return " | ".join(str(v).strip() for v in value if v)
+#     if isinstance(value, str):
+#         return value.strip()
+#     return ""
 
 def build_summary(violations):
     """Build a markdown summary string from a list of violations."""
