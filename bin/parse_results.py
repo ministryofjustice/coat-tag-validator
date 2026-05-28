@@ -12,29 +12,21 @@ def parse_violations(json_file):
         print(f"Warning: Could not parse {json_file}: {e}")
         return violations
 
-    return extract_checkov_results(results)
+    return extract_checkov_results_to_mrkdwn(results)
 
-def extract_checkov_results(results_dict):
-    violations = []
-    for check in results_dict.get("results", {}).get("failed_checks", []):
-        violations.append(
-            {
-                "resource": check.get("resource", ""),
-                "message": check.get("check_name", ""),
-                "details": check.get("details", ""),
-            }
-        )
+def extract_checkov_results_to_mrkdwn(results_dict):
+    unpacked_checks = results_dict.get("results", {}).get("failed_checks", [])
 
-    return violations
+    if not unpacked_checks:
+        return "✅ **All resources have required tags**"
 
-def build_mrkdwn_summary(violations):
-    lines = [f"❌ **Found {len(violations)} tag violation(s)**\n"]
-    for violation in violations:
-        lines.append(f"- Resource: {violation.get("resource", "")}")
-        lines.append(f"  - ❌ {violation.get('message', "")}")
-        lines.append(f"  - Details: {violation.get('details', "")}")
+    summary_lines = [f"❌ **Found {len(unpacked_checks)} tag violation(s)**\n"]
+    for check in unpacked_checks:
+        summary_lines.append(f"- Resource: {check.get("resource", "")}")
+        summary_lines.append(f"  - ❌ {check.get("check_name", "")}")
+        summary_lines.append(f"  - Details: {check.get('details', "")}")
 
-    return "\n".join(lines)
+    return "\n".join(summary_lines)
 
 
 def main():
