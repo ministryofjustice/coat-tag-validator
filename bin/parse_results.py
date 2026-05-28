@@ -47,9 +47,6 @@ def main():
         with open(github_output, "a", encoding="utf-8") as f:
             f.write(f"violations_summary<<EOF\n{violations.get("summary", "")}\nEOF\n")
 
-    # if not violations.get("violation_count", 0) == 0:
-    #     sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
