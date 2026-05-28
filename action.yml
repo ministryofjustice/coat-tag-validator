@@ -90,7 +90,22 @@ runs:
         set -e
 
     - name: Parse results
-      id: parse
+      id: parse-results
       shell: bash
       working-directory: ${{ inputs.terraform_directory }}
       run: python3 ${{ github.action_path }}/bin/parse_results.py
+
+    - name: Post Checkov Table to PR
+      if: always() && github.event_name == 'pull_request'
+      uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0
+      with:
+        header: tag-validation-results
+        message: steps.parse-results.outputs.violations_summary
+
+    - name: Fail workflow if Checkov failed
+      if: always()
+      shell: bash
+      run: |
+        if [ "${{ steps.checkov.outputs.exit_code }}" -ne 0 ]; then
+          exit ${{ steps.checkov.outputs.exit_code }}
+        fi
