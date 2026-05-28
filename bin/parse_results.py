@@ -3,19 +3,9 @@
 Parses Checkov JSON output and generates GitHub Action outputs.
 """
 
-import glob
 import json
 import os
 import sys
-
-
-def _format_details(value):
-    """Normalise Checkov's `details` field (list or str) to a single string."""
-    if isinstance(value, list):
-        return " | ".join(str(v).strip() for v in value if v)
-    if isinstance(value, str):
-        return value.strip()
-    return ""
 
 
 def parse_violations(json_file):
@@ -28,7 +18,11 @@ def parse_violations(json_file):
         print(f"Warning: Could not parse {json_file}: {e}")
         return violations
 
-    for check in results.get("results", {}).get("failed_checks", []):
+    return extract_checkov_results(results)
+
+def extract_checkov_results(results_dict)
+    violations = []
+    for check in results_dict.get("results", {}).get("failed_checks", []):
         violations.append(
             {
                 "resource": check.get("resource", ""),
@@ -39,6 +33,13 @@ def parse_violations(json_file):
 
     return violations
 
+def _format_details(value):
+    """Normalise Checkov's `details` field (list or str) to a single string."""
+    if isinstance(value, list):
+        return " | ".join(str(v).strip() for v in value if v)
+    if isinstance(value, str):
+        return value.strip()
+    return ""
 
 def build_summary(violations):
     """Build a markdown summary string from a list of violations."""
