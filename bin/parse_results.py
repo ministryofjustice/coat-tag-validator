@@ -4,7 +4,7 @@ import sys
 
 
 def parse_violations(json_file):
-    violations = []
+    violations = {}
     try:
         with open(json_file, encoding="utf-8") as f:
             results = json.load(f)
@@ -12,13 +12,16 @@ def parse_violations(json_file):
         print(f"Warning: Could not parse {json_file}: {e}")
         return violations
 
-    return extract_checkov_results_to_mrkdwn(results)
+    return extract_checkov_results(results)
 
-def extract_checkov_results_to_mrkdwn(results_dict):
+def extract_checkov_results(results_dict):
     unpacked_checks = results_dict.get("results", {}).get("failed_checks", [])
 
     if not unpacked_checks:
-        return "✅ **All resources have required tags**"
+        return {
+            "summary": "✅ **All resources have required tags**",
+            "violation_count": 0
+        }
 
     summary_lines = [f"❌ **Found {len(unpacked_checks)} tag violation(s)**\n"]
     for check in unpacked_checks:
@@ -26,7 +29,10 @@ def extract_checkov_results_to_mrkdwn(results_dict):
         summary_lines.append(f"  - ❌ {check.get("check_name", "")}")
         summary_lines.append(f"  - Details: {check.get('details', "")}")
 
-    return "\n".join(summary_lines)
+    return {
+        "summary": "\n".join(summary_lines),
+        "violation_count": len(unpacked_checks)
+    }
 
 
 def main():
@@ -35,11 +41,10 @@ def main():
 
     violations = parse_violations(results_file_path)
 
-    violations_count = len(violations)
+    violations_count = violations.get("violation_count", 0)
+    summary = violations.get("summary", "")
     passed = violations_count == 0
-    summary = build_mrkdwn_summary(violations) if violations else "✅ **All resources have required tags**"
 
-    print(f"\n📊 Violations: {violations_count}")
     print(summary)
 
     if github_output:
