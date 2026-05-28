@@ -20,7 +20,7 @@ def parse_violations(json_file):
 
     return extract_checkov_results(results)
 
-def extract_checkov_results(results_dict)
+def extract_checkov_results(results_dict):
     violations = []
     for check in results_dict.get("results", {}).get("failed_checks", []):
         violations.append(
