@@ -30,16 +30,6 @@ def extract_checkov_results(results_dict):
 def build_mrkdwn_summary(violations):
     lines = [f"❌ **Found {len(violations)} tag violation(s)**\n"]
     for violation in violations:
-        # resource = v["resource"]
-        # if resource.startswith("module."):
-        #     module_name = resource.split(".")[1]
-        #     hint = f"Check `modules/{module_name}/`"
-        # else:
-        #     resource_name = (
-        #         resource.split(".")[1] if "." in resource else resource
-        #     )
-        #     hint = f'Look for `resource ... "{resource_name}"`'
-
         lines.append(f"- Resource: {violation.get("resource", "")}")
         lines.append(f"  - ❌ {violation.get('message', "")}")
         lines.append(f"  - Details: {violation.get('details', "")}")
