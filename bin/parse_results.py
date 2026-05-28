@@ -97,7 +97,7 @@ def main():
             f.write(f"passed={str(passed).lower()}\n")
             f.write(f"violations_summary<<EOF\n{summary}\nEOF\n")
 
-    if not passed and not soft_fail:
+    if not passed:
         sys.exit(1)
 
 
