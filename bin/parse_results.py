@@ -27,7 +27,7 @@ def extract_checkov_results(results_dict):
             {
                 "resource": check.get("resource", ""),
                 "message": check.get("check_name", ""),
-                "details": check.get("details"),
+                "details": check.get("details", ""),
             }
         )
 
