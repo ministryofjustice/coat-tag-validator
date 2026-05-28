@@ -45,25 +45,6 @@ jobs:
         uses: ministryofjustice/coat-tag-validator@e0cccd30f5f5f01aa0902d42d79e5c7b32b78cbf #v2.1.0
         with:
           terraform_directory: ./terraform
-          soft_fail: false
-
-      - name: Post Results to PR
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        env:
-          SUMMARY: ${{ steps.validate.outputs.violations_summary }}
-          PASSED: ${{ steps.validate.outputs.passed }}
-        with:
-          script: |
-            const summary = process.env.SUMMARY || '✅ All resources have required tags';
-            const passed = process.env.PASSED === 'true';
-            const icon = passed ? '✅' : '⚠️';
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 🏷️ Tag Validation ${icon}\n\n${summary}`
-            });
 ```
 
 ## Inputs
@@ -71,14 +52,5 @@ jobs:
 | Input | Description | Required | Default |
 | ------- | ------------- | ---------- | --------- |
 | `terraform_directory` | Path to Terraform files | Yes | `.` |
-| `soft_fail` | Return exit code 0 even if violations found | No | `false` |
 | `terraform_workspace` | Terraform workspace | No | `` |
 | `terraform_plan_backend` | `local` plans all resources via a temporary local backend override (default). `remote` uses your configured backend and state (requires credentials). | No | `local` |
-
-## Outputs
-
-| Output | Description |
-| ------- | ----------- |
-| `violations_count` | Number of tag violations found |
-| `violations_summary` | Markdown summary for PR comments |
-| `passed` | Whether validation passed (`true`/`false`) |

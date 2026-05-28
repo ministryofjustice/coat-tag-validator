@@ -11,10 +11,6 @@ inputs:
     description: 'Path to Terraform files'
     required: true
     default: '.'
-  soft_fail:
-    description: 'Return exit code 0 even if violations found'
-    required: false
-    default: 'false'
   terraform_workspace:
     description: 'Terraform workspace name'
     required: false
@@ -83,23 +79,34 @@ runs:
       working-directory: ${{ inputs.terraform_directory }}
       run: |
         set +e
-        # Use terraform_plan framework to scan plan JSON (sees tags_all and module resources)
         checkov -f tfplan.json \
           --framework terraform_plan \
           --external-checks-dir ${{ github.action_path }}/policies \
-          --output cli \
-          --output json \
-          --output-file-path . \
           --check CKV_AWS_TAG_001 \
-          2>&1 | tee checkov_output.txt
-        CHECKOV_EXIT=$?
-        echo "exit_code=$CHECKOV_EXIT" >> $GITHUB_OUTPUT
+          --output json \
+          --output-file-path .
+          
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
 
     - name: Parse results
-      id: parse
+      id: parse-results
       shell: bash
-      env:
-        TERRAFORM_DIR: ${{ inputs.terraform_directory }}
-        SOFT_FAIL: ${{ inputs.soft_fail }}
+      working-directory: ${{ inputs.terraform_directory }}
       run: python3 ${{ github.action_path }}/bin/parse_results.py
+
+    - name: Post Checkov Table to PR
+      if: always() && github.event_name == 'pull_request'
+      uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0
+      with:
+        header: tag-validation-results
+        message: |
+          ${{ steps.parse-results.outputs.violations_summary }}
+
+    - name: Fail workflow if Checkov failed
+      if: always()
+      shell: bash
+      run: |
+        if [ "${{ steps.checkov.outputs.exit_code }}" -ne 0 ]; then
+          exit ${{ steps.checkov.outputs.exit_code }}
+        fi
