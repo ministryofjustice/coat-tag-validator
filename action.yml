@@ -20,17 +20,6 @@ inputs:
     required: false
     default: 'local'
 
-outputs:
-  violations_count:
-    description: 'Number of tag violations found'
-    value: ${{ steps.parse.outputs.violations_count }}
-  violations_summary:
-    description: 'Markdown summary of violations for PR comments'
-    value: ${{ steps.parse.outputs.violations_summary }}
-  passed:
-    description: 'Whether validation passed (true/false)'
-    value: ${{ steps.parse.outputs.passed }}
-
 runs:
   using: 'composite'
   steps:
