@@ -4,10 +4,10 @@
 
 This action:
 
-- **Prevents untagged resources** from being deployed by failing PRs with missing and invalid tags
-- **Enforces consistency** across teams by validating against a defined tag policy
-- **Reduces remediation costs** by catching issues at PR time, not after deployment
-- **Supports FinOps and compliance** by ensuring resources are properly attributed
+- Prevents untagged resources from being deployed by failing PRs with missing and invalid tags
+- Enforces consistency across teams by validating against a defined tag policy
+- Reduces remediation costs by catching issues at PR time, not after deployment
+- Supports FinOps and compliance by ensuring resources are properly attributed
 
 ## How to use
 
