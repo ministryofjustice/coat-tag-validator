@@ -42,7 +42,7 @@ jobs:
 
       - name: Validate Tags
         id: validate
-        uses: ministryofjustice/coat-tag-validator@e0cccd30f5f5f01aa0902d42d79e5c7b32b78cbf #v2.1.0
+        uses: ministryofjustice/coat-tag-validator@4329ca6f37d0de6a83cec210cd283c9a5d448006 #v2.2.0
         with:
           terraform_directory: ./terraform
 ```
