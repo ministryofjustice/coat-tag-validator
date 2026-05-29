@@ -4,10 +4,10 @@
 
 This action:
 
-- **Prevents untagged resources** from being deployed by failing PRs with missing and invalid tags
-- **Enforces consistency** across teams by validating against a defined tag policy
-- **Reduces remediation costs** by catching issues at PR time, not after deployment
-- **Supports FinOps and compliance** by ensuring resources are properly attributed
+- Prevents untagged resources from being deployed by failing PRs with missing and invalid tags
+- Enforces consistency across teams by validating against a defined tag policy
+- Reduces remediation costs by catching issues at PR time, not after deployment
+- Supports FinOps and compliance by ensuring resources are properly attributed
 
 ## How to use
 
@@ -42,7 +42,7 @@ jobs:
 
       - name: Validate Tags
         id: validate
-        uses: ministryofjustice/coat-tag-validator@e0cccd30f5f5f01aa0902d42d79e5c7b32b78cbf #v2.1.0
+        uses: ministryofjustice/coat-tag-validator@4329ca6f37d0de6a83cec210cd283c9a5d448006 #v2.2.0
         with:
           terraform_directory: ./terraform
 ```
@@ -52,5 +52,5 @@ jobs:
 | Input | Description | Required | Default |
 | ------- | ------------- | ---------- | --------- |
 | `terraform_directory` | Path to Terraform files | Yes | `.` |
-| `terraform_workspace` | Terraform workspace | No | `` |
+| `terraform_workspace` | Terraform workspace | No | `''` |
 | `terraform_plan_backend` | `local` plans all resources via a temporary local backend override (default). `remote` uses your configured backend and state (requires credentials). | No | `local` |
