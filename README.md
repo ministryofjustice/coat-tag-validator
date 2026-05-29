@@ -52,5 +52,5 @@ jobs:
 | Input | Description | Required | Default |
 | ------- | ------------- | ---------- | --------- |
 | `terraform_directory` | Path to Terraform files | Yes | `.` |
-| `terraform_workspace` | Terraform workspace | No | ```` |
+| `terraform_workspace` | Terraform workspace | No | `` |
 | `terraform_plan_backend` | `local` plans all resources via a temporary local backend override (default). `remote` uses your configured backend and state (requires credentials). | No | `local` |
