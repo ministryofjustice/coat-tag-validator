@@ -13,6 +13,7 @@ VALID_TAG_VALUES = {
         "CICA",
         "HMCTS",
         "HMPPS",
+        "HQ",
         "LAA",
         "OPG",
         "OCTO",
