@@ -36,8 +36,9 @@ def extract_checkov_results(results_dict):
         summary_lines.append(f"  - Details: {check.get('details', "")}")
 
     summary_lines.append(
-        f"\n📖 See the [MOJ Tagging Standard]({MOJ_TAGGING_STANDARD}) for more information."
-    )
+        f"\n📖 See the [MOJ Tagging Standard]({MOJ_TAGGING_STANDARD}) "
+        f"for more information."
+    )    
 
     return {
         "summary": "\n".join(summary_lines),
