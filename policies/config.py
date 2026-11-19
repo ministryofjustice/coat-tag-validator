@@ -14,6 +14,7 @@ VALID_TAG_VALUES = {
         "HMCTS",
         "HMPPS",
         "HQ",
+        "Justice AI Unit"
         "LAA",
         "OPG",
         "OCTO",
